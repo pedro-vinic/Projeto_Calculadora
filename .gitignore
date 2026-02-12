@@ -3,3 +3,10 @@ __pycache__/
 .venv/
 .env
 .ipynb_checkpoints/
+
+# Arquivos gerados
+relatorio.csv
+exports/
+
+# Arquivos de teste temporário
+test_db.py

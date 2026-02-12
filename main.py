@@ -11,6 +11,7 @@ from erros import (
     DivisaoPorZeroError,
     ExceptionGenericaError,
 )
+from db import log_operation
 
 
 class Executar:
@@ -22,7 +23,7 @@ class Executar:
         calculo.mensagem_inicial()
 
         while True:
-            try:
+            try:                
                 dados = calculo.menu()
 
                 if dados == "sair":
@@ -32,6 +33,8 @@ class Executar:
 
                 num1, operador, num2 = dados
                 resultado = calculo.calcular(num1, operador, num2)
+
+                log_operation(num1, num2, operador, resultado, "success")
 
                 print("-" * 40)
                 print(f"O resultado de {num1} {operador} {num2} é: {resultado}")
@@ -51,22 +54,14 @@ class Executar:
                     else:
                         print("Resposta inválida. Digite apenas 's' para sim ou 'n' para não.")
 
-            except NumeroInvalidoError as e:
-                print("-" * 40)
-                print(f"Erro: {e}")
-                print("-" * 40)
-
-            except OperadorInvalidoError as e:
-                print("-" * 40)
-                print(f"Erro: {e}")
-                print("-" * 40)
-
-            except DivisaoPorZeroError as e:
+            except (NumeroInvalidoError, OperadorInvalidoError, DivisaoPorZeroError) as e:
+                log_operation(num1, num2, operador, None, "error", str(e))
                 print("-" * 40)
                 print(f"Erro: {e}")
                 print("-" * 40)
 
             except ExceptionGenericaError as e:
+                log_operation(num1, num2, operador, None, "error", f"Erro inesperado: {e}")
                 print("-" * 40)
                 print(f"Erro inesperado: {e}")
                 print("-" * 40)
